@@ -25,7 +25,7 @@
 
 Name:           javapackages-tools
 Version:        5.3.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 
 Summary:        Macros and scripts for Java packaging support
 
@@ -146,7 +146,7 @@ Requires:       xmvn-resolve
 # Java build systems don't have hard requirement on java-devel, so it should be there
 Requires:       java-1.8.0-openjdk-devel
 Requires:       %{python_prefix}-javapackages = %{version}-%{release}
-Requires:       %{python_interpreter}
+Requires:       %{python_prefix}
 
 %description -n javapackages-local
 This package provides non-essential macros and scripts to support Java packaging.
@@ -204,9 +204,6 @@ rm -rf %{buildroot}%{_mandir}/man7/gradle_build.7
 %license LICENSE
 
 %changelog
-* Thu Oct  4 2018 Mikolaj Izdebski <mizdebsk@redhat.com> - 5.3.0-2
-- Make javapackages-local require Python interpreter executable path
-
 * Mon Aug 06 2018 Michael Simacek <msimacek@redhat.com> - 5.3.0-1
 - Update to upstream version 5.3.0
 

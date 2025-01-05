@@ -9,12 +9,12 @@
 %global python_prefix python3
 %global python_interpreter %{?__python3}%{!?__python3:dummy}
 
-%global default_jdk %{_prefix}/lib/jvm/java-11-openjdk
-%global default_jre %{_prefix}/lib/jvm/jre-11-openjdk
+%global default_jdk %{_prefix}/lib/jvm/java-17-openjdk
+%global default_jre %{_prefix}/lib/jvm/jre-17-openjdk
 
 Name:           javapackages-tools
 Version:        6.0.0
-Release:        4%{?dist}
+Release:        7%{?dist}
 Summary:        Macros and scripts for Java packaging support
 License:        BSD
 URL:            https://github.com/fedora-java/javapackages
@@ -26,6 +26,8 @@ Source3:        javapackages-config.json
 Source8:        toolchains-openjdk8.xml
 Source11:       toolchains-openjdk11.xml
 Source17:       toolchains-openjdk17.xml
+
+Patch1:         0001-Do-not-set-JAVA_HOME-for-ant.patch
 
 BuildRequires:  coreutils
 BuildRequires:  which
@@ -43,7 +45,7 @@ Requires:       coreutils
 Requires:       findutils
 Requires:       which
 # default JRE
-Requires:       java-11-openjdk-headless
+Requires:       java-17-openjdk-headless
 
 Provides:       jpackage-utils = %{version}-%{release}
 # These could be generated automatically, but then we would need to
@@ -68,6 +70,8 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       javapackages-local = %{version}-%{release}
 %if %{without bootstrap}
 Requires:       %{_bindir}/xmvn
+# NOTE keep using Java 11 for the whole lifecycle
+Requires:       maven-openjdk11
 Requires:       mvn(org.fedoraproject.xmvn:xmvn-mojo)
 # Common Maven plugins required by almost every build. It wouldn't make
 # sense to explicitly require them in every package built with Maven.
@@ -111,7 +115,9 @@ Requires:       %{_bindir}/xmvn-install
 Requires:       %{_bindir}/xmvn-subst
 Requires:       %{_bindir}/xmvn-resolve
 # Java build systems don't have hard requirement on java-devel, so it should be there
+# NOTE keep using Java 11 for the whole lifecycle
 Requires:       java-11-openjdk-devel
+Requires:       (ant-openjdk11 if ant)
 %endif
 
 %description -n javapackages-local
@@ -154,7 +160,7 @@ Requires:       java-17-openjdk-devel
 OpenJDK 17 toolchain for XMvn
 
 %prep
-%setup -q -n javapackages-%{version}
+%autosetup -p1 -n javapackages-%{version}
 
 sed -i '/^manpage /d' build
 sed -i '/${mandir}/d' install
@@ -220,6 +226,21 @@ install -p -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/java/javapackages-config
 %license LICENSE
 
 %changelog
+* Mon Nov 18 2024 Marián Konček <mkoncek@redhat.com> - 6.0.0-7
+- Use Java 11 build tool bindings for package builds
+
+* Mon Nov 04 2024 Marián Konček <mkoncek@redhat.com> - 6.0.0-6
+- Drop generated Requires on various Java versions
+- Related: RHEL-62409
+
+* Mon Oct 21 2024 Marián Konček <mkoncek@redhat.com> - 6.0.0-5
+- Include java-21-headless in generated auto-requires
+- Related: RHEL-62409
+
+* Mon Oct 21 2024 Marián Konček <mkoncek@redhat.com> - 6.0.0-5
+- Make OpenJDK 17 the default JRE/JDK
+- Related: RHEL-62403
+
 * Wed Jan 25 2023 Marián Konček <mkoncek@redhat.com> - 6.0.0-4
 - Add generated Requires on multiple versions of java-headless
 - Related: rhbz#2164437

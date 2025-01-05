@@ -1,0 +1,25 @@
+From 849e007338475a125cc791a91902b010ff3b5337 Mon Sep 17 00:00:00 2001
+From: Marian Koncek <mkoncek@redhat.com>
+Date: Tue, 22 Oct 2024 00:09:51 +0200
+Subject: [PATCH] Do not set JAVA_HOME for ant
+
+---
+ macros.d/macros.jpackage | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/macros.d/macros.jpackage b/macros.d/macros.jpackage
+index 13595e9..6c70788 100644
+--- a/macros.d/macros.jpackage
++++ b/macros.d/macros.jpackage
+@@ -15,7 +15,7 @@
+ #==============================================================================
+ # ---- default Java commands
+ 
+-%ant            %{?jpb_env} JAVA_HOME=%{java_home} ant
++%ant            %{?jpb_env} ant
+ %jar            %{java_home}/bin/jar
+ %java           %(. @{javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)
+ %javac          %{java_home}/bin/javac
+-- 
+2.47.0
+

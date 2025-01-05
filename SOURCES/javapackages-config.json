@@ -1,8 +1,7 @@
 {
     "maven.req": {
         "always_generate": [
-            "javapackages-filesystem",
-            "(java-headless or java-17-headless or java-11-headless or java-1.8.0-headless)"
+            "javapackages-filesystem"
         ],
         "java_requires": {
             "skip": true

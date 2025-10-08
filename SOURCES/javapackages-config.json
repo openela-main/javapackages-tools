@@ -1,0 +1,18 @@
+{
+    "maven.req": {
+        "always_generate": [
+            "javapackages-filesystem"
+        ],
+        "java_requires": {
+            "skip": true
+        },
+        "java_devel_requires": {
+            "skip": true
+        }
+    },
+    "javadoc.req": {
+        "always_generate": [
+            "javapackages-filesystem"
+        ]
+    }
+}
